@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dl7xrbovpjk6n"]
+[gd_scene load_steps=5 format=3 uid="uid://dl7xrbovpjk6n"]
 
 [ext_resource type="Shader" path="res://assets/shader/bg.gdshader" id="1_01kgf"]
 [ext_resource type="Texture2D" uid="uid://beunn8tnltnpp" path="res://assets/images/bg.png" id="1_4d2xf"]
+[ext_resource type="Script" path="res://Main.gd" id="1_n2hpg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cltio"]
 shader = ExtResource("1_01kgf")
@@ -13,6 +14,7 @@ shader_parameter/color1 = null
 shader_parameter/color2 = Color(1, 1, 0, 1)
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_n2hpg")
 
 [node name="Bg" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_cltio")
@@ -20,3 +22,7 @@ scale = Vector2(1.35, 1.35)
 texture = ExtResource("1_4d2xf")
 centered = false
 metadata/_edit_lock_ = true
+
+[node name="EnemyLayer" type="CanvasLayer" parent="."]
+
+[node name="ParticleLayer" type="CanvasLayer" parent="."]
