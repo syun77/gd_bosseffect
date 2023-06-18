@@ -10,6 +10,7 @@ class_name Enemy
 # ------------------------------------------
 var PARTICLE_EXPLOSION = preload("res://src/particle/ParticleExplosion.tscn")
 var PARTICLE_SHOCK_WAVE = preload("res://src/particle/ParticleShockWave.tscn")
+var PARTICLE_SHOCK_WAVE2 = preload("res://src/particle/ParticleShockWave2.tscn")
 
 # ------------------------------------------
 # consts.
@@ -20,6 +21,7 @@ enum eType {
 	ANIM_PATTERN2,
 	PARTS,
 	FLASH,
+	SHOCKWAVE_CIRCLE,
 }
 
 # ------------------------------------------
@@ -59,10 +61,13 @@ func destroy() -> void:
 	
 	match _id:
 		eType.FLASH:
+			# 白フラッシュ.
 			var p = PARTICLE_SHOCK_WAVE.instantiate()
 			p.position = position
 			p.setup(0, 0, 2.0)
 			_add_child(p)
+		eType.SHOCKWAVE_CIRCLE:
+			pass # 何も発生しない.
 		_:
 			for i in range(32):
 				var rot = 360 * i / 32.0
@@ -79,7 +84,8 @@ func _add_particle(deg:float, spd:float, sc:float, ofs:Vector2=Vector2()) -> voi
 	_add_child(p)
 
 func _move(delta:float) -> void:
-	call("_move_" + eType.keys()[_id], delta)
+	var funcname = "_move_" + eType.keys()[_id]
+	call(funcname, delta)
 	
 func _x_move_and_clip(delta:float) -> bool:
 	position.x += _velocity.x * delta
@@ -222,3 +228,15 @@ func _init_FLASH() -> void:
 	_max_timer = 2.0
 func _move_FLASH(delta:float) -> void:
 	_move_ANIM_PATTERN(delta)
+	
+## 円形の衝撃波.
+func _init_SHOCKWAVE_CIRCLE() -> void:
+	_max_timer = 2.0
+	var p = PARTICLE_SHOCK_WAVE2.instantiate()
+	p.position = position
+	p.setup(270, 10, 3.0, 0.0)
+	_add_child(p)
+	
+func _move_SHOCKWAVE_CIRCLE(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)
+	
