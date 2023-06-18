@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Common="*res://src/Common.gd"
+Ease="*res://src/Ease.gd"
 
 [display]
 

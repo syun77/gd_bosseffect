@@ -5,6 +5,8 @@ extends Sprite2D
 # ============================================
 class_name Particle
 
+var color = Color.WHITE
+
 var _cnt = 0 # move呼び出し回数.
 var _deg = 0.0 # 移動方向.
 var _speed = 0.0 # 移動速度.

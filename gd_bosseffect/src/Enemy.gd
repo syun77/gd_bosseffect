@@ -9,6 +9,7 @@ class_name Enemy
 # preload.
 # ------------------------------------------
 var PARTICLE_EXPLOSION = preload("res://src/particle/ParticleExplosion.tscn")
+var PARTICLE_SHOCK_WAVE = preload("res://src/particle/ParticleShockWave.tscn")
 
 # ------------------------------------------
 # consts.
@@ -18,6 +19,7 @@ enum eType {
 	ANIM_PATTERN,
 	ANIM_PATTERN2,
 	PARTS,
+	FLASH,
 }
 
 # ------------------------------------------
@@ -54,9 +56,17 @@ func set_velocity(deg:float, spd:float) -> void:
 	_velocity.y = spd * -sin(rad)
 	
 func destroy() -> void:
-	for i in range(32):
-		var rot = 360 * i / 32.0
-		_add_particle(rot, 500, 2.0)
+	
+	match _id:
+		eType.FLASH:
+			var p = PARTICLE_SHOCK_WAVE.instantiate()
+			p.position = position
+			p.setup(0, 0, 2.0)
+			_add_child(p)
+		_:
+			for i in range(32):
+				var rot = 360 * i / 32.0
+				_add_particle(rot, 500, 2.0)
 
 func _add_child(obj) -> void:
 	var layer = Common.get_layer("particle")
@@ -152,7 +162,7 @@ func _move_PARTS(delta:float) -> void:
 	# ゆっくり落下.
 	position.y += 10 * delta
 
-	_velocity *= 0.95
+	_velocity *= 0.9
 	position += _velocity * delta
 	
 	var ofs = Vector2()
@@ -167,10 +177,11 @@ func _move_PARTS(delta:float) -> void:
 				_parts1.visible = false
 				_step += 1
 				_timer = 0
-				set_velocity(180, 300)
+				set_velocity(180, 500) # 爆発の反動.
+				Common.start_shake(0.2, 1) # 少し揺らす.
 				for i in range(32):
 					var rot = 360 * i / 32.0
-					_add_particle(rot, 300, 0.7, ofs)
+					_add_particle(rot, 350, 0.7, ofs)
 		1:
 			_cnt = 0
 			if _timer > 0.2:
@@ -185,10 +196,11 @@ func _move_PARTS(delta:float) -> void:
 				_parts2.visible = false
 				_step += 1
 				_timer = 0
-				set_velocity(0, 300)
+				set_velocity(0, 500) # 爆発の反動.
+				Common.start_shake(0.2, 1) # 少し揺らす.
 				for i in range(32):
 					var rot = 360 * i / 32.0
-					_add_particle(rot, 300, 0.7, ofs)
+					_add_particle(rot, 350, 0.7, ofs)
 		3:
 			_cnt = 0
 			if _timer > 0.2:
@@ -204,3 +216,9 @@ func _move_PARTS(delta:float) -> void:
 		_add_particle(deg, spd, sc, ofs)
 		_cnt -= 10
 	_cnt += randi_range(0, 2)
+
+## 衝撃波.
+func _init_FLASH() -> void:
+	_max_timer = 2.0
+func _move_FLASH(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)
