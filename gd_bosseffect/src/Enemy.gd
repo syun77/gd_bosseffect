@@ -18,6 +18,7 @@ var PARTICLE_SHOCK_WAVE2 = preload("res://src/particle/ParticleShockWave2.tscn")
 const SIZE = 256 * 0.75 / 2
 enum eType {
 	ANIM_PATTERN,
+	ANIM_PATTERN_SLOW,
 	ANIM_PATTERN2,
 	PARTS,
 	FLASH,
@@ -35,7 +36,7 @@ enum eType {
 # vars.
 # ------------------------------------------
 var _id = eType.ANIM_PATTERN
-var _cnt = 0
+var _cnt = 0.0
 var _step = 0
 var _timer = 0.0
 var _max_timer = 3.0
@@ -69,9 +70,15 @@ func destroy() -> void:
 		eType.SHOCKWAVE_CIRCLE:
 			pass # 何も発生しない.
 		_:
+			var spd = 700
+			match _id:
+				eType.ANIM_PATTERN_SLOW, eType.ANIM_PATTERN2, eType.PARTS:
+					# スロー再生あり.
+					Common.start_slow()
+					spd = 1500 # decayの影響を受けるので少し速くする.
 			for i in range(32):
 				var rot = 360 * i / 32.0
-				_add_particle(rot, 500, 2.0)
+				_add_particle(rot, spd, 2.0)
 
 func _add_child(obj) -> void:
 	var layer = Common.get_layer("particle")
@@ -89,8 +96,8 @@ func _move(delta:float) -> void:
 	
 func _x_move_and_clip(delta:float) -> bool:
 	position.x += _velocity.x * delta
-	if position.x < 480 + SIZE:
-		position.x = 480 + SIZE
+	if position.x < 240 + SIZE:
+		position.x = 240 + SIZE
 		return true
 	if position.x > 1080 - SIZE:
 		position.x = 1080 - SIZE
@@ -108,7 +115,9 @@ func _y_move_and_clip(delta:float) -> bool:
 	
 
 func _physics_process(delta: float) -> void:
-	_cnt += 1
+	delta *= Common.get_slow_rate()
+	
+	_cnt += 1 * Common.get_slow_rate()
 	_timer += delta
 	
 	# 移動.
@@ -134,9 +143,15 @@ func _move_ANIM_PATTERN(delta:float) -> void:
 		_cnt -= 10
 	_cnt += randi_range(0, 2)
 
+## スローあり.
+func _init_ANIM_PATTERN_SLOW() -> void:
+	_max_timer = 2.0
+func _move_ANIM_PATTERN_SLOW(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)
+
 ## 画面内を動き回るパターン.
 func _init_ANIM_PATTERN2() -> void:
-	var spd = 1000;
+	var spd = 2000;
 	var deg = randf_range(0, 360)
 	set_velocity(deg, spd)
 	_max_timer = 2.0
@@ -184,6 +199,7 @@ func _move_PARTS(delta:float) -> void:
 				_step += 1
 				_timer = 0
 				set_velocity(180, 500) # 爆発の反動.
+				Common.start_slow(0.2, 0.1) # ヒットストップ.
 				Common.start_shake(0.2, 1) # 少し揺らす.
 				for i in range(32):
 					var rot = 360 * i / 32.0
@@ -203,6 +219,7 @@ func _move_PARTS(delta:float) -> void:
 				_step += 1
 				_timer = 0
 				set_velocity(0, 500) # 爆発の反動.
+				Common.start_slow(0.2, 0.1) # ヒットストップ.
 				Common.start_shake(0.2, 1) # 少し揺らす.
 				for i in range(32):
 					var rot = 360 * i / 32.0

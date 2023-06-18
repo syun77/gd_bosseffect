@@ -62,7 +62,13 @@ func _ready() -> void:
 
 ## 更新.
 func _physics_process(delta: float) -> void:
-	move(delta)
+	delta *= Common.get_slow_rate()
+
+	_update(delta)
 	
 	if is_end():
 		queue_free()
+
+## 更新(オーバーライド用)
+func _update(delta:float) -> void:
+	move(delta)

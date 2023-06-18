@@ -10,8 +10,10 @@ const TIMER_SHAKE = 1.0
 
 @export var enemy_type:Enemy.eType
 
-var _cnt = 0
+var _cnt = 0.0
 var _exists_enemy = false
+var _prev_cnt = 0
+var _prev_shake_y = 0.0
 
 
 ## 開始.
@@ -33,12 +35,17 @@ func _ready() -> void:
 
 ## 更新.
 func _process(delta: float) -> void:
-	_cnt += 1
+	Common.update_slow(delta)
+	
+	_cnt += Common.get_slow_rate()
 	if Input.is_action_just_pressed("ui_rclick"):
 		# 右クリックで敵を生成.
 		add_enemy()
 	
+	delta *= Common.get_slow_rate()
 	_update_shake(delta)
+	
+	_prev_cnt = _cnt
 
 ## 敵を追加.
 func add_enemy() -> void:
@@ -61,6 +68,9 @@ func _update_shake(delta:float):
 		return
 		
 	var rate = Common.get_shake_rate() * Common.shake_power
-	var x_mul = 1 if _cnt%4 < 2 else -1
+	var x_mul = 1 if int(_cnt)%4 < 2 else -1
 	_camera.offset.x = 32 * rate * x_mul
-	_camera.offset.y = randf_range(-24, 24) * rate
+	if _prev_cnt != int(_cnt):
+		# 値が変わったら乱数を引く.
+		_prev_shake_y = randf_range(-24, 24)
+	_camera.offset.y = _prev_shake_y * rate

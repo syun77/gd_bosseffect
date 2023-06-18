@@ -2,7 +2,7 @@ extends Particle
 
 var _step = 0
 
-func _physics_process(delta: float) -> void:
+func _update(delta: float) -> void:
 	move(delta)
 	
 	var sc = 0.25

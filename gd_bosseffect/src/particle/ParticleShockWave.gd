@@ -1,6 +1,6 @@
 extends Particle
 
-func _physics_process(delta: float) -> void:
+func _update(delta: float) -> void:
 	move(delta)
 
 	queue_redraw()
