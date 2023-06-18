@@ -16,7 +16,7 @@ shader_parameter/color2 = Color(1, 1, 0, 1)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_n2hpg")
-enemy_type = 1
+enemy_type = 2
 
 [node name="Bg" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_cltio")

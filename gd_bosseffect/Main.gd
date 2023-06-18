@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 ## 敵を追加.
 func add_enemy() -> void:
 	var e = ENEMY_OBJ.instantiate()
+	_enemy_layer.add_child(e)
 	e.position = Vector2(800, 240)
 	e.set_type(_option.selected)
-	_enemy_layer.add_child(e)
 	

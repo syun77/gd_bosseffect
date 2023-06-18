@@ -17,18 +17,22 @@ const SIZE = 256 * 0.75 / 2
 enum eType {
 	ANIM_PATTERN,
 	ANIM_PATTERN2,
+	PARTS,
 }
 
 # ------------------------------------------
 # onready.
 # ------------------------------------------
 @onready var _spr = $Sprite
+@onready var _parts1 = $Parts1
+@onready var _parts2 = $Parts2
 
 # ------------------------------------------
 # vars.
 # ------------------------------------------
 var _id = eType.ANIM_PATTERN
 var _cnt = 0
+var _step = 0
 var _timer = 0.0
 var _max_timer = 3.0
 var _velocity = Vector2()
@@ -137,3 +141,66 @@ func _move_ANIM_PATTERN2(delta:float) -> void:
 		_cnt -= 10
 	_cnt += randi_range(0, 2)
 
+## 部位破壊.
+func _init_PARTS() -> void:
+	# パーツを表示.
+	_parts1.visible = true
+	_parts2.visible = true
+	_max_timer = 1.5
+
+func _move_PARTS(delta:float) -> void:
+	# ゆっくり落下.
+	position.y += 10 * delta
+
+	_velocity *= 0.95
+	position += _velocity * delta
+	
+	var ofs = Vector2()
+	var sc = randf_range(0.8, 1.2)
+	match _step:
+		0:
+			# 揺らす.
+			_parts1.offset.x = randf_range(-16, 16)
+			ofs += _parts1.position
+			sc = randf_range(0.5, 0.8)
+			if _timer > 0.8:
+				_parts1.visible = false
+				_step += 1
+				_timer = 0
+				set_velocity(180, 300)
+				for i in range(32):
+					var rot = 360 * i / 32.0
+					_add_particle(rot, 300, 0.7, ofs)
+		1:
+			_cnt = 0
+			if _timer > 0.2:
+				_step += 1
+				_timer = 0
+		2:
+			# 揺らす.
+			_parts2.offset.x = randf_range(-16, 16)
+			ofs += _parts2.position
+			sc = randf_range(0.5, 0.8)
+			if _timer > 0.8:
+				_parts2.visible = false
+				_step += 1
+				_timer = 0
+				set_velocity(0, 300)
+				for i in range(32):
+					var rot = 360 * i / 32.0
+					_add_particle(rot, 300, 0.7, ofs)
+		3:
+			_cnt = 0
+			if _timer > 0.2:
+				_step += 1
+				_timer = 0
+		4:
+			# 揺らす.
+			_spr.offset.x = randf_range(-8, 8)
+			ofs += Vector2(randf_range(-64, 64), randf_range(-64, 64))
+	if _cnt > 10:
+		var deg = randf_range(0, 360)
+		var spd = randf_range(100, 300)
+		_add_particle(deg, spd, sc, ofs)
+		_cnt -= 10
+	_cnt += randi_range(0, 2)

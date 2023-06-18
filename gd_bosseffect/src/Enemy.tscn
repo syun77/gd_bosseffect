@@ -10,3 +10,19 @@ script = ExtResource("1_dkuqr")
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("1_cque3")
 hframes = 8
+
+[node name="Parts1" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(144, 0)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_cque3")
+hframes = 8
+frame = 1
+
+[node name="Parts2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-167, 0)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_cque3")
+hframes = 8
+frame = 1
