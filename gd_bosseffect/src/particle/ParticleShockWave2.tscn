@@ -3,11 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://72fwk86kdeol" path="res://assets/images/circle.png" id="1_coj3j"]
 [ext_resource type="Script" path="res://src/particle/ParticleShockWave2.gd" id="2_7gj8j"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_132au"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_bfm6h"]
 blend_mode = 1
 
 [node name="ParticleShockWave2" type="Sprite2D"]
 modulate = Color(1, 0, 0, 0.705882)
-material = SubResource("CanvasItemMaterial_132au")
+material = SubResource("CanvasItemMaterial_bfm6h")
 texture = ExtResource("1_coj3j")
 script = ExtResource("2_7gj8j")

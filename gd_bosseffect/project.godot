@@ -23,6 +23,7 @@ Ease="*res://src/Ease.gd"
 [display]
 
 window/size/viewport_width=1080
+window/stretch/mode="viewport"
 
 [input]
 

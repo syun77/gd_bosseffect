@@ -7,9 +7,9 @@ func _update(delta: float) -> void:
 
 func _draw() -> void:
 	var rate = get_time_rate()
-	var alpha = 0.7
-	if rate > 0.9:
-		alpha *= (1 - rate) / 0.1
+	var alpha = 1.0
+	if rate > 0.8:
+		alpha *= (1 - rate) / 0.2
 	var w = 2048 * Ease.expo_out(rate)
 	var h = 2048
 	var x = -w/2

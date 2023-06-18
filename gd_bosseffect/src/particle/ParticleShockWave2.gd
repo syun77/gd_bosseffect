@@ -10,14 +10,16 @@ func _update(delta: float) -> void:
 	var sy = 1.0
 	match _step:
 		0:
+			material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 			var rate = _timer / 2.0
-			sc += 0.1 * rate
+			sc += 0.3 * rate
 			if rate >= 1:
 				_timer = 0
 				_life = 1.0
 				_step += 1
+				material.blend_mode = CanvasItemMaterial.BLEND_MODE_MIX
 		1:
-			sc += 0.1
+			sc += 0.3
 			if _timer < 0.1:
 				var rate = Ease.expo_out(_timer / 0.1)
 				sx -= 0.2 * rate

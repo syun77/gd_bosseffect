@@ -11,6 +11,7 @@ class_name Enemy
 var PARTICLE_EXPLOSION = preload("res://src/particle/ParticleExplosion.tscn")
 var PARTICLE_SHOCK_WAVE = preload("res://src/particle/ParticleShockWave.tscn")
 var PARTICLE_SHOCK_WAVE2 = preload("res://src/particle/ParticleShockWave2.tscn")
+var PARTICLE_RECT = preload("res://src/particle/ParticleRect.tscn")
 
 # ------------------------------------------
 # consts.
@@ -21,8 +22,10 @@ enum eType {
 	ANIM_PATTERN_SLOW,
 	ANIM_PATTERN2,
 	PARTS,
-	FLASH,
 	SHOCKWAVE_CIRCLE,
+	SHOCKWAVE_RECT,
+	FLASH,
+	WHITE,
 }
 
 # ------------------------------------------
@@ -65,14 +68,20 @@ func destroy() -> void:
 			# 白フラッシュ.
 			var p = PARTICLE_SHOCK_WAVE.instantiate()
 			p.position = position
-			p.setup(0, 0, 2.0)
+			p.setup(0, 0, 1.5)
 			_add_child(p)
 		eType.SHOCKWAVE_CIRCLE:
-			pass # 何も発生しない.
+			Common.change_bg(Common.eBg.WHITE, 1.0)
+		eType.SHOCKWAVE_RECT:
+			var p = PARTICLE_RECT.instantiate()
+			p.position = position
+			p.setup(0, 0, 1.5)
+			p.color = Color.RED
+			_add_child(p)
 		_:
 			var spd = 700
 			match _id:
-				eType.ANIM_PATTERN_SLOW, eType.ANIM_PATTERN2, eType.PARTS:
+				eType.ANIM_PATTERN_SLOW, eType.ANIM_PATTERN2, eType.PARTS, eType.WHITE:
 					# スロー再生あり.
 					Common.start_slow()
 					spd = 1500 # decayの影響を受けるので少し速くする.
@@ -245,6 +254,15 @@ func _init_FLASH() -> void:
 	_max_timer = 2.0
 func _move_FLASH(delta:float) -> void:
 	_move_ANIM_PATTERN(delta)
+
+## 背景を白にする.
+func _init_WHITE() -> void:
+	_max_timer = 2.0
+	Common.change_bg(Common.eBg.WHITE, 2.2)
+func _move_WHITE(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)
+	
+	_spr.modulate = _spr.modulate.lerp(Color.BLACK, 10 * delta)
 	
 ## 円形の衝撃波.
 func _init_SHOCKWAVE_CIRCLE() -> void:
@@ -253,7 +271,11 @@ func _init_SHOCKWAVE_CIRCLE() -> void:
 	p.position = position
 	p.setup(270, 10, 3.0, 0.0)
 	_add_child(p)
-	
 func _move_SHOCKWAVE_CIRCLE(delta:float) -> void:
 	_move_ANIM_PATTERN(delta)
 	
+## 矩形の衝撃波.
+func _init_SHOCKWAVE_RECT() -> void:
+	_max_timer = 2.0
+func _move_SHOCKWAVE_RECT(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)

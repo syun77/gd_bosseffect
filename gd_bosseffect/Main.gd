@@ -3,6 +3,8 @@ extends Node2D
 const ENEMY_OBJ = preload("res://src/Enemy.tscn")
 const TIMER_SHAKE = 1.0
 
+@onready var _bg = $Bg
+@onready var _bg_color = $Bg/ColorRect
 @onready var _camera = $Camera2D
 @onready var _option = $UILayer/OptionButton
 @onready var _enemy_layer = $EnemyLayer
@@ -44,6 +46,7 @@ func _process(delta: float) -> void:
 	
 	delta *= Common.get_slow_rate()
 	_update_shake(delta)
+	_update_bg(delta)
 	
 	_prev_cnt = _cnt
 
@@ -55,7 +58,7 @@ func add_enemy() -> void:
 	e.set_type(_option.selected)
 	
 ## 画面を揺らす.
-func _update_shake(delta:float):
+func _update_shake(delta:float) -> void:
 	var prev = _exists_enemy
 	_exists_enemy = _enemy_layer.get_child_count() > 0
 	if prev:
@@ -74,3 +77,21 @@ func _update_shake(delta:float):
 		# 値が変わったら乱数を引く.
 		_prev_shake_y = randf_range(-24, 24)
 	_camera.offset.y = _prev_shake_y * rate
+	
+## 背景の更新.
+func _update_bg(delta:float) -> void:
+	_bg_color.visible = false
+	if Common.update_bg(delta) == false:
+		return
+	
+	var type = Common.bg_type
+	var rate = Common.get_bg_rate()
+	
+	match type:
+		Common.eBg.WHITE:
+			_bg_color.visible = true
+			if rate < 0.8:
+				rate = 1.0
+			else:
+				rate = 1.0 - (rate - 0.8) / 0.2
+			_bg_color.color.a = rate
