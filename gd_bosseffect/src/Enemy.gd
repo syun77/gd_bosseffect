@@ -44,6 +44,9 @@ var _step = 0
 var _timer = 0.0
 var _max_timer = 3.0
 var _velocity = Vector2()
+var _color = Color.WHITE
+var _color_time = 0.0
+var _color_max_time = 0.0
 
 # ------------------------------------------
 # function.
@@ -60,6 +63,11 @@ func set_velocity(deg:float, spd:float) -> void:
 	var rad = deg_to_rad(deg)
 	_velocity.x = spd * cos(rad)
 	_velocity.y = spd * -sin(rad)
+
+func change_color(color:Color, time=1.0) -> void:
+	_color = color
+	_color_max_time = time
+	_color_time = time
 	
 func destroy() -> void:
 	
@@ -122,7 +130,7 @@ func _y_move_and_clip(delta:float) -> bool:
 		return true
 	return false
 	
-
+## 更新.
 func _physics_process(delta: float) -> void:
 	delta *= Common.get_slow_rate()
 	
@@ -132,9 +140,24 @@ func _physics_process(delta: float) -> void:
 	# 移動.
 	_move(delta)
 	
+	_update_color(delta)
+	
 	if _timer >= _max_timer:
 		destroy()
 		queue_free()
+
+## 色の更新.
+func _update_color(delta:float) -> void:
+	if _color_time <= 0.0:
+		return
+	
+	_color_time -= delta
+	if _color_time <= 0.0:
+		modulate = Color.WHITE
+		return
+	
+	var rate = _color_time / _color_max_time
+	modulate = Color.WHITE.lerp(_color, rate)
 
 ## オーソドックスなパターン.
 func _move_ANIM_PATTERN(delta:float) -> void:
@@ -192,7 +215,7 @@ func _move_PARTS(delta:float) -> void:
 	# ゆっくり落下.
 	position.y += 10 * delta
 
-	_velocity *= 0.9
+	_velocity *= 0.85
 	position += _velocity * delta
 	
 	var ofs = Vector2()
@@ -207,9 +230,9 @@ func _move_PARTS(delta:float) -> void:
 				_parts1.visible = false
 				_step += 1
 				_timer = 0
-				set_velocity(180, 500) # 爆発の反動.
-				Common.start_slow(0.2, 0.1) # ヒットストップ.
+				set_velocity(180, 1000) # 爆発の反動.
 				Common.start_shake(0.2, 1) # 少し揺らす.
+				change_color(Color.RED)
 				for i in range(32):
 					var rot = 360 * i / 32.0
 					_add_particle(rot, 350, 0.7, ofs)
@@ -227,9 +250,9 @@ func _move_PARTS(delta:float) -> void:
 				_parts2.visible = false
 				_step += 1
 				_timer = 0
-				set_velocity(0, 500) # 爆発の反動.
-				Common.start_slow(0.2, 0.1) # ヒットストップ.
+				set_velocity(0, 1000) # 爆発の反動.
 				Common.start_shake(0.2, 1) # 少し揺らす.
+				change_color(Color.RED)
 				for i in range(32):
 					var rot = 360 * i / 32.0
 					_add_particle(rot, 350, 0.7, ofs)
