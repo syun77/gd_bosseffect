@@ -24,6 +24,7 @@ enum eType {
 	PARTS,
 	SHOCKWAVE_CIRCLE,
 	SHOCKWAVE_RECT,
+	RAY,
 	FLASH,
 	WHITE,
 }
@@ -40,6 +41,7 @@ enum eType {
 # ------------------------------------------
 var _id = eType.ANIM_PATTERN
 var _cnt = 0.0
+var _cnt2 = 0.0
 var _step = 0
 var _timer = 0.0
 var _max_timer = 3.0
@@ -47,6 +49,7 @@ var _velocity = Vector2()
 var _color = Color.WHITE
 var _color_time = 0.0
 var _color_max_time = 0.0
+var _ray_list = []
 
 # ------------------------------------------
 # function.
@@ -145,6 +148,15 @@ func _physics_process(delta: float) -> void:
 	if _timer >= _max_timer:
 		destroy()
 		queue_free()
+	
+	queue_redraw()
+
+## 描画.
+func _draw() -> void:
+	var funcname = "_draw_" + eType.keys()[_id]
+	if has_method(funcname):
+		# 描画関数があれば呼び出し.
+		call(funcname)
 
 ## 色の更新.
 func _update_color(delta:float) -> void:
@@ -157,6 +169,8 @@ func _update_color(delta:float) -> void:
 		return
 	
 	var rate = _color_time / _color_max_time
+	if _id == eType.RAY:
+		rate = 1 - rate # 光線の場合は逆.
 	modulate = Color.WHITE.lerp(_color, rate)
 
 ## オーソドックスなパターン.
@@ -277,6 +291,44 @@ func _init_FLASH() -> void:
 	_max_timer = 2.0
 func _move_FLASH(delta:float) -> void:
 	_move_ANIM_PATTERN(delta)
+	
+## 光線.
+func _init_RAY() -> void:
+	_cnt = 20
+func _move_RAY(delta:float) -> void:
+	_move_ANIM_PATTERN(delta)
+	
+	_cnt2 += Common.get_slow_rate()
+	if _cnt2 > 20 and _ray_list.size() < 5:
+		var rad = _timer * 8 + randf_range(0, 0.5)
+		_ray_list.push_back(rad)
+		if _ray_list.size() >= 5:
+			change_color(Color.RED, _max_timer - _timer)
+		_cnt2 -= randf_range(15, 25)
+func _draw_RAY() -> void:
+	var idx = 0
+	for rad in _ray_list:
+		var dist = SIZE * 0.01 + 0.01 * (idx%2)
+		var ofs = Vector2(
+			dist * cos(rad),
+			dist * -sin(rad)
+		)
+		var vlist = [ofs]
+		var c = Color.WHITE
+		if int(_cnt)%2 == 0:
+			c.a = 0.0
+		var clist = [c, c, c]
+		vlist.push_back(ofs + Vector2(
+			2048 * cos(rad + 0.02),
+			2048 * sin(rad + 0.1)
+		))
+		vlist.push_back(ofs + Vector2(
+			2048 * cos(rad - 0.05),
+			2048 * sin(rad - 0.1)
+		))
+		draw_polygon(vlist, clist)
+		
+		idx += 1
 
 ## 背景を白にする.
 func _init_WHITE() -> void:
