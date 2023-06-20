@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7kky018houbi"]
+
+[ext_resource type="Script" path="res://src/particle/ParticleCircleWhite.gd" id="1_ls8tc"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_peb0m"]
+blend_mode = 1
+
+[node name="ParticleRect" type="Sprite2D"]
+material = SubResource("CanvasItemMaterial_peb0m")
+script = ExtResource("1_ls8tc")

@@ -1,31 +1,58 @@
-[gd_scene load_steps=6 format=3 uid="uid://dl7xrbovpjk6n"]
+[gd_scene load_steps=7 format=3 uid="uid://dl7xrbovpjk6n"]
 
 [ext_resource type="Shader" path="res://assets/shader/bg.gdshader" id="1_01kgf"]
 [ext_resource type="Texture2D" uid="uid://beunn8tnltnpp" path="res://assets/images/bg.png" id="1_4d2xf"]
 [ext_resource type="Script" path="res://Main.gd" id="1_n2hpg"]
 [ext_resource type="Theme" uid="uid://cp0dpuhgevj2x" path="res://assets/fonts/new_theme.tres" id="4_ejr3u"]
+[ext_resource type="Texture2D" uid="uid://c2uj0mj70aytr" path="res://assets/images/enemy.png" id="4_isr6o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cltio"]
 shader = ExtResource("1_01kgf")
-shader_parameter/intensity = 1.0
+shader_parameter/intensity = 0.14
 shader_parameter/time = 0.0
 shader_parameter/is_binarization = false
+shader_parameter/is_horizontal = false
 shader_parameter/threshold = 2.0
 shader_parameter/color1 = null
 shader_parameter/color2 = Color(1, 1, 0, 1)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_n2hpg")
-enemy_type = 6
+enemy_type = 9
+
+[node name="Bg2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(6.10352e-05, 0)
+scale = Vector2(1.35, 1.35)
+texture = ExtResource("1_4d2xf")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Mask" type="Sprite2D" parent="."]
+clip_children = 1
+position = Vector2(800, 240)
+scale = Vector2(0.7506, 0.7506)
+texture = ExtResource("4_isr6o")
+hframes = 8
+
+[node name="Bg" type="Sprite2D" parent="Mask"]
+material = SubResource("ShaderMaterial_cltio")
+position = Vector2(-1065.81, -319.744)
+scale = Vector2(1.79856, 1.79856)
+texture = ExtResource("1_4d2xf")
+centered = false
+metadata/_edit_lock_ = true
 
 [node name="Bg" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_cltio")
+position = Vector2(6.10352e-05, 0)
 scale = Vector2(1.35, 1.35)
 texture = ExtResource("1_4d2xf")
 centered = false
 metadata/_edit_lock_ = true
 
 [node name="ColorRect" type="ColorRect" parent="Bg"]
+visible = false
 offset_left = -82.963
 offset_top = -41.4815
 offset_right = 871.037

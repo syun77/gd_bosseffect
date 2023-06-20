@@ -8,10 +8,11 @@ class_name Enemy
 # ------------------------------------------
 # preload.
 # ------------------------------------------
-var PARTICLE_EXPLOSION = preload("res://src/particle/ParticleExplosion.tscn")
-var PARTICLE_SHOCK_WAVE = preload("res://src/particle/ParticleShockWave.tscn")
-var PARTICLE_SHOCK_WAVE2 = preload("res://src/particle/ParticleShockWave2.tscn")
-var PARTICLE_RECT = preload("res://src/particle/ParticleRect.tscn")
+const PARTICLE_EXPLOSION = preload("res://src/particle/ParticleExplosion.tscn")
+const PARTICLE_SHOCK_WAVE = preload("res://src/particle/ParticleShockWave.tscn")
+const PARTICLE_SHOCK_WAVE2 = preload("res://src/particle/ParticleShockWave2.tscn")
+const PARTICLE_RECT = preload("res://src/particle/ParticleRect.tscn")
+const PARTICLE_CIRCLE_WHITE = preload("res://src/particle/ParticleCircleWhite.tscn")
 
 # ------------------------------------------
 # consts.
@@ -27,6 +28,7 @@ enum eType {
 	RAY,
 	FLASH,
 	WHITE,
+	SPECIAL,
 }
 
 # ------------------------------------------
@@ -83,12 +85,24 @@ func destroy() -> void:
 			_add_child(p)
 		eType.SHOCKWAVE_CIRCLE:
 			Common.change_bg(Common.eBg.WHITE, 1.0)
+		eType.RAY:
+			# 白い円が拡大.
+			var p = PARTICLE_CIRCLE_WHITE.instantiate()
+			p.position = position
+			p.setup(0, 0, 1.5)
+			_add_child(p)
+			var spd = 700
+			for i in range(32):
+				var rot = 360 * i / 32.0
+				_add_particle(rot, spd, 2.0)
 		eType.SHOCKWAVE_RECT:
 			var p = PARTICLE_RECT.instantiate()
 			p.position = position
 			p.setup(0, 0, 1.5)
 			p.color = Color.RED
 			_add_child(p)
+		eType.SPECIAL:
+			pass
 		_:
 			var spd = 700
 			match _id:
@@ -354,3 +368,12 @@ func _init_SHOCKWAVE_RECT() -> void:
 	_max_timer = 2.0
 func _move_SHOCKWAVE_RECT(delta:float) -> void:
 	_move_ANIM_PATTERN(delta)
+
+## 特殊.
+func _init_SPECIAL() -> void:
+	_max_timer = 7.0
+	Common.change_bg(Common.eBg.RASTER, _max_timer)
+func _move_SPECIAL(delta:float) -> void:
+	if _timer < 0.5:
+		var rate = 1 - _timer / 0.5
+		modulate.a = rate
