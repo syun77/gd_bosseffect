@@ -371,7 +371,7 @@ func _move_SHOCKWAVE_RECT(delta:float) -> void:
 
 ## 特殊.
 func _init_SPECIAL() -> void:
-	_max_timer = 7.0
+	_max_timer = 8.0
 	Common.change_bg(Common.eBg.RASTER, _max_timer)
 func _move_SPECIAL(delta:float) -> void:
 	if _timer < 0.5:

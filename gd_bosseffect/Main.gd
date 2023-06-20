@@ -141,7 +141,7 @@ func _update_bg(delta:float) -> void:
 				# 2値化とラスター処理を終了.
 				mat.set_shader_parameter("is_binarization", false)
 				var rate2 = 1.0 - (rate - 0.9) / 0.1
-				mat.set_shader_parameter("time", 100*Ease.cube_in(rate2))
+				mat.set_shader_parameter("time", 100*Ease.expo_in(rate2))
 				_bg.visible = true
 				_bg_color.visible = true
 				_bg_color.color.a = rate2
