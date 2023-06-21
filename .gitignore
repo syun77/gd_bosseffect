@@ -16,3 +16,4 @@ mono_crash.*.json
 
 # for macOS
 .DS_Store
+*.avi
