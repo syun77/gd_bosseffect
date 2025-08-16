@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dsi55wueroovy"]
 
-[ext_resource type="Script" path="res://src/particle/ParticleRect.gd" id="1_ace8p"]
+[ext_resource type="Script" uid="uid://dn5f1p51nwqkk" path="res://src/particle/ParticleRect.gd" id="1_ace8p"]
 [ext_resource type="Texture2D" uid="uid://nc2q8lkmgkya" path="res://assets/images/rect.png" id="1_hc58b"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_peb0m"]

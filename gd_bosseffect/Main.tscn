@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dl7xrbovpjk6n"]
 
-[ext_resource type="Shader" path="res://assets/shader/bg.gdshader" id="1_01kgf"]
+[ext_resource type="Shader" uid="uid://o0lsmpeh6df0" path="res://assets/shader/bg.gdshader" id="1_01kgf"]
 [ext_resource type="Texture2D" uid="uid://beunn8tnltnpp" path="res://assets/images/bg.png" id="1_4d2xf"]
-[ext_resource type="Script" path="res://Main.gd" id="1_n2hpg"]
+[ext_resource type="Script" uid="uid://quj4pjs5lb0h" path="res://Main.gd" id="1_n2hpg"]
 [ext_resource type="Theme" uid="uid://cp0dpuhgevj2x" path="res://assets/fonts/new_theme.tres" id="4_ejr3u"]
 [ext_resource type="Texture2D" uid="uid://c2uj0mj70aytr" path="res://assets/images/enemy.png" id="4_isr6o"]
 
@@ -13,7 +13,7 @@ shader_parameter/time = 0.0
 shader_parameter/is_binarization = false
 shader_parameter/is_horizontal = false
 shader_parameter/threshold = 2.0
-shader_parameter/color1 = null
+shader_parameter/color1 = Color(0, 0, 0, 1)
 shader_parameter/color2 = Color(1, 1, 0, 1)
 
 [node name="Main" type="Node2D"]

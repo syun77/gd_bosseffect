@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bhmptil8v5e73"]
 
-[ext_resource type="Script" path="res://src/particle/ParticleShockWave.gd" id="1_3sqaw"]
+[ext_resource type="Script" uid="uid://lsjowhatb351" path="res://src/particle/ParticleShockWave.gd" id="1_3sqaw"]
 
 [node name="ParticleShockWave" type="Sprite2D"]
 script = ExtResource("1_3sqaw")

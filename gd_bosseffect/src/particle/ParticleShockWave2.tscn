@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cwvcg044qtyv2"]
 
 [ext_resource type="Texture2D" uid="uid://72fwk86kdeol" path="res://assets/images/circle.png" id="1_coj3j"]
-[ext_resource type="Script" path="res://src/particle/ParticleShockWave2.gd" id="2_7gj8j"]
+[ext_resource type="Script" uid="uid://cyr7hbuaacmxe" path="res://src/particle/ParticleShockWave2.gd" id="2_7gj8j"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_bfm6h"]
 blend_mode = 1

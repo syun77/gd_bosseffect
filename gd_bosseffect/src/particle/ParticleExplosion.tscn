@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cslnjo0l6bv8r"]
 
 [ext_resource type="Texture2D" uid="uid://b5mmrxi1fthgs" path="res://assets/images/explosion.png" id="1_hwxfe"]
-[ext_resource type="Script" path="res://src/particle/ParticleExplosion.gd" id="2_hqpyh"]
+[ext_resource type="Script" uid="uid://c4ngxncaxeeor" path="res://src/particle/ParticleExplosion.gd" id="2_hqpyh"]
 
 [node name="ParticleExplosion" type="Sprite2D"]
 texture = ExtResource("1_hwxfe")
